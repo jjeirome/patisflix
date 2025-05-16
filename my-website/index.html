@@ -16,7 +16,7 @@
             background-color: #141414;
             color: white;
         }
-        
+
         .disclaimer {
             color: white;
             font-size: 12px;
@@ -28,7 +28,7 @@
             margin-left: auto;
             margin-right: auto;
         }
-        
+
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -242,6 +242,7 @@
             border: none;
             border-radius: 4px;
             margin-bottom: 15px;
+            width: 100%;
         }
 
         /* Search Modal */
@@ -306,29 +307,29 @@
             .navbar {
                 padding: 15px;
             }
-            
+
             .banner {
                 padding: 0 20px;
                 height: 60vh;
             }
-            
+
             .banner-title {
                 font-size: 2rem;
                 max-width: 100%;
             }
-            
+
             .row {
                 padding: 20px;
             }
-            
+
             .modal-body {
                 flex-direction: column;
             }
-            
+
             .modal-image {
                 width: 100%;
             }
-            
+
             .modal-video {
                 height: 250px;
             }
@@ -386,6 +387,13 @@
                         <option value="vidsrc.cc">Server 1 (vidsrc.cc)</option>
                         <option value="vidsrc.me">Server 2 (vidsrc.me)</option>
                         <option value="player.videasy.net">Server 3 (player.videasy.net)</option>
+                        <option value="vidsrc.stream">Server 4 (vidsrc.stream)</option>
+                        <option value="2embed.org">Server 5 (2embed.org)</option>
+                        <option value="multiembed.mov">Server 6 (multiembed.mov)</option>
+                        <option value="embed.smashystream.com">Server 7 (smashystream.com)</option>
+                        <option value="database.gdriveplayer.us">Server 8 (gdriveplayer.us)</option>
+                        <option value="moviesapi.club">Server 9 (moviesapi.club)</option>
+                        <option value="superembed.stream">Server 10 (superembed.stream)</option>
                     </select>
                     <p class="modal-description" id="modal-description"></p>
                 </div>
@@ -433,7 +441,7 @@
         function displayBanner(item) {
             document.getElementById('banner').style.backgroundImage = `linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%), url(${IMG_URL}${item.backdrop_path})`;
             document.getElementById('banner-title').textContent = item.title || item.name;
-            
+
             // Set banner buttons to open the modal
             document.querySelector('.banner-button.play').onclick = () => showDetails(item);
             document.querySelector('.banner-button.info').onclick = () => showDetails(item);
@@ -444,7 +452,7 @@
             container.innerHTML = '';
             items.forEach(item => {
                 if (!item.poster_path) return;
-                
+
                 const img = document.createElement('img');
                 img.src = `${IMG_URL}${item.poster_path}`;
                 img.alt = item.title || item.name;
@@ -458,11 +466,11 @@
             document.getElementById('modal-title').textContent = item.title || item.name;
             document.getElementById('modal-description').textContent = item.overview;
             document.getElementById('modal-image').src = `${IMG_URL}${item.poster_path}`;
-            
+
             // Create star rating (0-5 stars based on vote_average)
             const rating = Math.round(item.vote_average / 2);
             document.getElementById('modal-rating').innerHTML = '★'.repeat(rating) + '☆'.repeat(5 - rating) + ` (${item.vote_average.toFixed(1)}/10)`;
-            
+
             changeServer();
             document.getElementById('modal').style.display = 'flex';
         }
@@ -478,6 +486,20 @@
                 embedURL = `https://vidsrc.net/embed/${type}/?tmdb=${currentItem.id}`;
             } else if (server === "player.videasy.net") {
                 embedURL = `https://player.videasy.net/${type}/${currentItem.id}`;
+            } else if (server === "vidsrc.stream") {
+                embedURL = `https://vidsrc.stream/${type}/${currentItem.id}`;
+            } else if (server === "2embed.org") {
+                embedURL = `https://www.2embed.org/embed/${type}/${currentItem.id}`;
+            } else if (server === "multiembed.mov") {
+                embedURL = `https://multiembed.mov/?video_id=${currentItem.id}&tmdb=1&media_type=${type}`;
+            } else if (server === "embed.smashystream.com") {
+                embedURL = `https://embed.smashystream.com/playere.php?tmdb=${currentItem.id}&type=${type}`;
+            } else if (server === "database.gdriveplayer.us") {
+                embedURL = `https://database.gdriveplayer.us/player.php?type=${type}&tmdb=${currentItem.id}`;
+            } else if (server === "moviesapi.club") {
+                embedURL = `https://moviesapi.club/${type}/${currentItem.id}`;
+            } else if (server === "superembed.stream") {
+                embedURL = `https://superembed.stream/${type}/${currentItem.id}`;
             }
 
             document.getElementById('modal-video').src = embedURL;
@@ -543,10 +565,8 @@
         }
 
         init();
-        
-
     </script>
-                <footer>
+    <footer>
         <div class="disclaimer">
             <strong>Disclaimer:</strong><br>
             This website's server has no files on it. Only content from third-party websites 
