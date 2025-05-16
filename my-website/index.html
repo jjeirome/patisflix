@@ -433,7 +433,7 @@
 <body>
     <!-- Navbar -->
     <nav class="navbar">
-        <img src="https://blogger.googleusercontent.com/img/a/AVvXsEiiZjh5HV9KWDzC56QoPC9NLXF5mZzoPCWt8NhaE1nCoNCvHdfuEScH47SK1lZRs1UMoyIfhaYHvziiB8h_k1z3qphky4CiXFsg_b8mV5DpgFLFJp9gi4vHxtOdjmsDDbC7iuAKotlHATJAMMuAkZ3YXs1bBwNC2whY3aQz5B9xC1DzqwoEJ3_g-m_MU6K_=s301" alt="Streamflix Logo">
+        <img src="https://blogger.googleusercontent.com/img/a/AVvXsEiiZjh5HV9KWDzC56QoPC9NLXF5mZzoPCWt8NhaE1nCoNCvHdfuEScH47SK1lZRs1UMoyIfhaYHvziiB8h_k1z3qphky4CiXFsg_b8mV5DpgFLFJp9gi4vHxtOdjmsDDbC7iuAKotlHATJAMMuAkZ3YXs1bBwNC2whY3aQz5B9xC1DzqwoEJ3_g-m_MU6K_=s301" alt="Patisflix Logo">
         <div class="nav-right">
             <i class="fas fa-search" onclick="openSearchModal()"></i>
         </div>
@@ -589,8 +589,8 @@
                 seriesNav.style.display = 'none';
             }
 
+            changeServer();
             document.getElementById('modal').style.display = 'flex';
-            changeServer(); // This will now trigger the auto-play
         }
 
         async function loadSeasons(tvId) {
@@ -636,118 +636,4 @@
                 card.onclick = () => {
                     document.querySelectorAll('.episode-card').forEach(c => c.classList.remove('active'));
                     card.classList.add('active');
-                    currentEpisode = episode.episode_number;
-                    changeServer();
-                };
-                
-                // Activate first episode by default
-                if (episode.episode_number === 1) {
-                    card.classList.add('active');
-                    currentEpisode = 1;
-                }
-                
-                episodeSelector.appendChild(card);
-            });
-            
-            changeServer();
-        }
-
-        function changeServer() {
-            const server = document.getElementById('server').value;
-            const videoFrame = document.getElementById('modal-video');
-            
-            if (currentItem.media_type === 'tv' || (currentItem.media_type === undefined && currentItem.name)) {
-                // TV Show
-                videoFrame.src = `https://${server}/tv/${currentItem.id}/${currentSeason}/${currentEpisode}?autoplay=1`;
-            } else {
-                // Movie
-                videoFrame.src = `https://${server}/movie/${currentItem.id}?autoplay=1`;
-            }
-            
-            // Ensure the video plays when the source changes
-            videoFrame.onload = function() {
-                // Some servers might strip the autoplay parameter, so we add it again
-                if (!videoFrame.src.includes('autoplay=1')) {
-                    videoFrame.src = videoFrame.src + (videoFrame.src.includes('?') ? '&' : '?') + 'autoplay=1';
-                }
-            };
-        }
-
-        function closeModal() {
-            document.getElementById('modal').style.display = 'none';
-            document.getElementById('modal-video').src = ''; // Stop video when modal closes
-        }
-
-        // Initialize the page
-        async function init() {
-            try {
-                const movies = await fetchTrending('movie');
-                const tvShows = await fetchTrending('tv');
-                const anime = await fetchTrendingAnime();
-                
-                displayBanner(movies[0]);
-                displayList(movies, 'movies-list');
-                displayList(tvShows, 'tvshows-list');
-                displayList(anime, 'anime-list');
-            } catch (error) {
-                console.error('Error initializing:', error);
-            }
-        }
-
-        // Search functionality
-        async function searchTMDB() {
-            const query = document.getElementById('search-input').value;
-            if (query.length < 2) {
-                document.getElementById('search-results').innerHTML = '';
-                return;
-            }
-            
-            const res = await fetch(`${BASE_URL}/search/multi?api_key=${API_KEY}&query=${query}`);
-            const data = await res.json();
-            
-            const resultsContainer = document.getElementById('search-results');
-            resultsContainer.innerHTML = '';
-            
-            data.results.forEach(item => {
-                if (!item.poster_path) return;
-                
-                const img = document.createElement('img');
-                img.src = `${IMG_URL}${item.poster_path}`;
-                img.alt = item.title || item.name;
-                img.onclick = () => {
-                    showDetails(item);
-                    closeSearchModal();
-                };
-                resultsContainer.appendChild(img);
-            });
-        }
-
-        function openSearchModal() {
-            document.getElementById('search-modal').style.display = 'flex';
-            document.getElementById('search-input').focus();
-        }
-
-        function closeSearchModal() {
-            document.getElementById('search-modal').style.display = 'none';
-            document.getElementById('search-input').value = '';
-            document.getElementById('search-results').innerHTML = '';
-        }
-
-        // Close modals when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('modal');
-            if (event.target === modal) {
-                closeModal();
-            }
-            
-            const searchModal = document.getElementById('search-modal');
-            if (event.target === searchModal) {
-                closeSearchModal();
-            }
-        };
-
-        // Initialize the app
-        init();
-    </script>
-</body>
-</html>
+                    currentEpisode = e
