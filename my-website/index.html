@@ -477,16 +477,11 @@
                     <h2 class="modal-title" id="modal-title"></h2>
                     <div class="modal-rating" id="modal-rating"></div>
                     <select class="server-select" id="server" onchange="changeServer()">
-                        <option value="vidsrc.cc">Server 1</option>
-                        <option value="vidsrc.me">Server 2</option>
-                        <option value="player.videasy.net">Server 3</option>
-                        <option value="vidsrc.stream">Server 4</option>
-                        <option value="2embed.org">Server 5</option>
-                        <option value="multiembed.mov">Server 6</option>
-                        <option value="embed.smashystream.com">Server 7</option>
-                        <option value="database.gdriveplayer.us">Server 8</option>
-                        <option value="moviesapi.club">Server 9</option>
-                        <option value="superembed.stream">Server 10</option>
+                        <option value="vidsrc.me">Server 1</option>
+                        <option value="player.videasy.net">Server 2</option>
+                        <option value="multiembed.mov">Server 3</option>
+                        <option value="moviesapi.club">Server 4</option>
+                        <option value="vidlink.pro">Server 5</option>
                     </select>
                     
                     <!-- Series Navigation -->
@@ -664,49 +659,29 @@
 
             if (type === "tv") {
                 // TV show with season and episode
-                if (server === "vidsrc.cc") {
-                    embedURL = `https://vidsrc.cc/v2/embed/${type}/${currentItem.id}/${currentSeason}/${currentEpisode}`;
-                } else if (server === "vidsrc.me") {
-                    embedURL = `https://vidsrc.net/embed/${type}/?tmdb=${currentItem.id}&season=${currentSeason}&episode=${currentEpisode}`;
+                if (server === "vidsrc.me") {
+                    embedURL = `https://vidsrc.me/embed/${type}/${currentItem.id}/${currentSeason}/${currentEpisode}`;
                 } else if (server === "player.videasy.net") {
                     embedURL = `https://player.videasy.net/${type}/${currentItem.id}/${currentSeason}/${currentEpisode}`;
-                } else if (server === "vidsrc.stream") {
-                    embedURL = `https://vidsrc.stream/${type}/${currentItem.id}/${currentSeason}/${currentEpisode}`;
-                } else if (server === "2embed.org") {
-                    embedURL = `https://www.2embed.org/embed/${type}/${currentItem.id}/${currentSeason}/${currentEpisode}`;
                 } else if (server === "multiembed.mov") {
                     embedURL = `https://multiembed.mov/?video_id=${currentItem.id}&tmdb=1&s=${currentSeason}&e=${currentEpisode}&media_type=${type}`;
-                } else if (server === "embed.smashystream.com") {
-                    embedURL = `https://embed.smashystream.com/playere.php?tmdb=${currentItem.id}&season=${currentSeason}&episode=${currentEpisode}&type=${type}`;
-                } else if (server === "database.gdriveplayer.us") {
-                    embedURL = `https://database.gdriveplayer.us/player.php?type=${type}&tmdb=${currentItem.id}&season=${currentSeason}&episode=${currentEpisode}`;
                 } else if (server === "moviesapi.club") {
                     embedURL = `https://moviesapi.club/${type}/${currentItem.id}/${currentSeason}/${currentEpisode}`;
-                } else if (server === "superembed.stream") {
-                    embedURL = `https://superembed.stream/${type}/${currentItem.id}/${currentSeason}/${currentEpisode}`;
+                } else if (server === "2embed.cc") {
+                    embedURL = `https://2embed.cc/series/${currentItem.id}/${currentSeason}/${currentEpisode}`;
                 }
             } else {
                 // Movie
-                if (server === "vidsrc.cc") {
-                    embedURL = `https://vidsrc.cc/v2/embed/${type}/${currentItem.id}`;
-                } else if (server === "vidsrc.me") {
-                    embedURL = `https://vidsrc.net/embed/${type}/?tmdb=${currentItem.id}`;
+                if (server === "vidsrc.me") {
+                    embedURL = `https://vidsrc.me/embed/${type}/${currentItem.id}`;
                 } else if (server === "player.videasy.net") {
                     embedURL = `https://player.videasy.net/${type}/${currentItem.id}`;
-                } else if (server === "vidsrc.stream") {
-                    embedURL = `https://vidsrc.stream/${type}/${currentItem.id}`;
-                } else if (server === "2embed.org") {
-                    embedURL = `https://www.2embed.org/embed/${type}/${currentItem.id}`;
                 } else if (server === "multiembed.mov") {
                     embedURL = `https://multiembed.mov/?video_id=${currentItem.id}&tmdb=1&media_type=${type}`;
-                } else if (server === "embed.smashystream.com") {
-                    embedURL = `https://embed.smashystream.com/playere.php?tmdb=${currentItem.id}&type=${type}`;
-                } else if (server === "database.gdriveplayer.us") {
-                    embedURL = `https://database.gdriveplayer.us/player.php?type=${type}&tmdb=${currentItem.id}`;
                 } else if (server === "moviesapi.club") {
                     embedURL = `https://moviesapi.club/${type}/${currentItem.id}`;
-                } else if (server === "superembed.stream") {
-                    embedURL = `https://superembed.stream/${type}/${currentItem.id}`;
+                } else if (server === "vidlink.pro") {
+                    embedURL = `https://vidlink.pro/movie/${currentItem.id}`;
                 }
             }
 
