@@ -1,3 +1,5 @@
+Add a fallback function to my movie server source when fail to load.
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -433,7 +435,7 @@
 <body>
     <!-- Navbar -->
     <nav class="navbar">
-        <img src="https://blogger.googleusercontent.com/img/a/AVvXsEiiZjh5HV9KWDzC56QoPC9NLXF5mZzoPCWt8NhaE1nCoNCvHdfuEScH47SK1lZRs1UMoyIfhaYHvziiB8h_k1z3qphky4CiXFsg_b8mV5DpgFLFJp9gi4vHxtOdjmsDDbC7iuAKotlHATJAMMuAkZ3YXs1bBwNC2whY3aQz5B9xC1DzqwoEJ3_g-m_MU6K_=s301" alt="Patisflix Logo">
+        <img src="https://blogger.googleusercontent.com/img/a/AVvXsEiiZjh5HV9KWDzC56QoPC9NLXF5mZzoPCWt8NhaE1nCoNCvHdfuEScH47SK1lZRs1UMoyIfhaYHvziiB8h_k1z3qphky4CiXFsg_b8mV5DpgFLFJp9gi4vHxtOdjmsDDbC7iuAKotlHATJAMMuAkZ3YXs1bBwNC2whY3aQz5B9xC1DzqwoEJ3_g-m_MU6K_=s301" alt="Streamflix Logo">
         <div class="nav-right">
             <i class="fas fa-search" onclick="openSearchModal()"></i>
         </div>
@@ -636,4 +638,128 @@
                 card.onclick = () => {
                     document.querySelectorAll('.episode-card').forEach(c => c.classList.remove('active'));
                     card.classList.add('active');
-                    currentEpisode = e
+                    currentEpisode = episode.episode_number;
+                    changeServer();
+                };
+                
+                // Activate first episode by default
+                if (episode.episode_number === 1) {
+                    card.classList.add('active');
+                    currentEpisode = 1;
+                }
+                
+                episodeSelector.appendChild(card);
+            });
+            
+            changeServer();
+        }
+
+        function changeServer() {
+            const server = document.getElementById('server').value;
+            const type = currentItem.media_type === "movie" ? "movie" : "tv";
+            let embedURL = "";
+
+            if (type === "tv") {
+                // TV show with season and episode
+                if (server === "vidsrc.me") {
+                    embedURL = `https://vidsrc.me/embed/${type}/${currentItem.id}/${currentSeason}/${currentEpisode}`;
+                } else if (server === "player.videasy.net") {
+                    embedURL = `https://player.videasy.net/${type}/${currentItem.id}/${currentSeason}/${currentEpisode}`;
+                } else if (server === "multiembed.mov") {
+                    embedURL = `https://multiembed.mov/?video_id=${currentItem.id}&tmdb=1&s=${currentSeason}&e=${currentEpisode}&media_type=${type}`;
+                } else if (server === "moviesapi.club") {
+                    embedURL = `https://moviesapi.club/${type}/${currentItem.id}/${currentSeason}/${currentEpisode}`;
+                } else if (server === "2embed.cc") {
+                    embedURL = `https://2embed.cc/series/${currentItem.id}/${currentSeason}/${currentEpisode}`;
+                }
+            } else {
+                // Movie
+                if (server === "vidsrc.me") {
+                    embedURL = `https://vidsrc.me/embed/${type}/${currentItem.id}`;
+                } else if (server === "player.videasy.net") {
+                    embedURL = `https://player.videasy.net/${type}/${currentItem.id}`;
+                } else if (server === "multiembed.mov") {
+                    embedURL = `https://multiembed.mov/?video_id=${currentItem.id}&tmdb=1&media_type=${type}`;
+                } else if (server === "moviesapi.club") {
+                    embedURL = `https://moviesapi.club/${type}/${currentItem.id}`;
+                } else if (server === "vidlink.pro") {
+                    embedURL = `https://vidlink.pro/movie/${currentItem.id}`;
+                }
+            }
+
+            document.getElementById('modal-video').src = embedURL;
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+            document.getElementById('modal-video').src = '';
+        }
+
+        function openSearchModal() {
+            document.getElementById('search-modal').style.display = 'flex';
+            document.getElementById('search-input').focus();
+        }
+
+        function closeSearchModal() {
+            document.getElementById('search-modal').style.display = 'none';
+            document.getElementById('search-results').innerHTML = '';
+            document.getElementById('search-input').value = '';
+        }
+
+        async function searchTMDB() {
+            const query = document.getElementById('search-input').value;
+            if (!query.trim()) {
+                document.getElementById('search-results').innerHTML = '';
+                return;
+            }
+
+            const res = await fetch(`${BASE_URL}/search/multi?api_key=${API_KEY}&query=${query}`);
+            const data = await res.json();
+
+            const container = document.getElementById('search-results');
+            container.innerHTML = '';
+            data.results.forEach(item => {
+                if (!item.poster_path) return;
+                const img = document.createElement('img');
+                img.src = `${IMG_URL}${item.poster_path}`;
+                img.alt = item.title || item.name;
+                img.onclick = () => {
+                    closeSearchModal();
+                    showDetails(item);
+                };
+                container.appendChild(img);
+            });
+        }
+
+        // Handle Enter key in search
+        document.getElementById('search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchTMDB();
+            }
+        });
+
+        async function init() {
+            const movies = await fetchTrending('movie');
+            const tvShows = await fetchTrending('tv');
+            const anime = await fetchTrendingAnime();
+
+            displayBanner(movies[Math.floor(Math.random() * movies.length)]);
+            displayList(movies, 'movies-list');
+            displayList(tvShows, 'tvshows-list');
+            displayList(anime, 'anime-list');
+        }
+
+        init();
+    </script>
+    <footer>
+        <div class="disclaimer">
+            <strong>Disclaimer:</strong><br>
+            This website's server has no files on it. Only content from third-party websites 
+            and services is displayed on this website. We have no control over or 
+            endorsement of any of the products, services, or material provided by 
+            these websites.
+        <p>&copy; Patisflix</p>
+        </div>
+    </footer>
+</body>
+</html>
