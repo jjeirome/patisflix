@@ -175,6 +175,9 @@
             max-width: 900px;
             border-radius: 8px;
             overflow: hidden;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .modal-header {
@@ -208,15 +211,20 @@
             padding: 20px;
             display: flex;
             gap: 20px;
+            overflow-y: auto;
+            max-height: calc(90vh - 400px); /* Adjust based on video height */
         }
 
         .modal-image {
             width: 200px;
             border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
         }
 
         .modal-info {
             flex: 1;
+            min-width: 0; /* Prevent flex item from overflowing */
         }
 
         .modal-title {
@@ -243,6 +251,25 @@
             border-radius: 4px;
             margin-bottom: 15px;
             width: 100%;
+        }
+
+        /* Scrollbar styling */
+        .modal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-body::-webkit-scrollbar-track {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb:hover {
+            background: #555;
         }
 
         /* Series Navigation */
@@ -450,16 +477,16 @@
                     <h2 class="modal-title" id="modal-title"></h2>
                     <div class="modal-rating" id="modal-rating"></div>
                     <select class="server-select" id="server" onchange="changeServer()">
-                        <option value="vidsrc.cc">Server 1 (vidsrc.cc)</option>
-                        <option value="vidsrc.me">Server 2 (vidsrc.me)</option>
-                        <option value="player.videasy.net">Server 3 (player.videasy.net)</option>
-                        <option value="vidsrc.stream">Server 4 (vidsrc.stream)</option>
-                        <option value="2embed.org">Server 5 (2embed.org)</option>
-                        <option value="multiembed.mov">Server 6 (multiembed.mov)</option>
-                        <option value="embed.smashystream.com">Server 7 (smashystream.com)</option>
-                        <option value="database.gdriveplayer.us">Server 8 (gdriveplayer.us)</option>
-                        <option value="moviesapi.club">Server 9 (moviesapi.club)</option>
-                        <option value="superembed.stream">Server 10 (superembed.stream)</option>
+                        <option value="vidsrc.cc">Server 1</option>
+                        <option value="vidsrc.me">Server 2</option>
+                        <option value="player.videasy.net">Server 3</option>
+                        <option value="vidsrc.stream">Server 4</option>
+                        <option value="2embed.org">Server 5</option>
+                        <option value="multiembed.mov">Server 6</option>
+                        <option value="embed.smashystream.com">Server 7</option>
+                        <option value="database.gdriveplayer.us">Server 8</option>
+                        <option value="moviesapi.club">Server 9</option>
+                        <option value="superembed.stream">Server 10</option>
                     </select>
                     
                     <!-- Series Navigation -->
