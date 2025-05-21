@@ -125,10 +125,48 @@
             z-index: 10;
         }
 
+        .row-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
         .row-title {
             font-size: 1.4rem;
             font-weight: 600;
-            margin-bottom: 15px;
+        }
+
+        .row-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .row-nav-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .row-nav-button:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .row-nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .row-list-container {
+            position: relative;
         }
 
         .row-list {
@@ -136,21 +174,108 @@
             gap: 10px;
             overflow-x: scroll;
             scrollbar-width: none;
+            scroll-behavior: smooth;
         }
 
         .row-list::-webkit-scrollbar {
             display: none;
         }
 
+        .row-list-item {
+            position: relative;
+            height: 150px;
+            transition: transform 0.3s;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
         .row-list img {
             height: 150px;
             border-radius: 4px;
             transition: transform 0.3s;
-            cursor: pointer;
         }
 
-        .row-list img:hover {
+        .row-list-item:hover {
             transform: scale(1.1);
+            z-index: 5;
+        }
+
+        /* Quick Preview Hover Effect */
+        .quick-preview {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            width: 300px;
+            background: #181818;
+            border-radius: 4px;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            display: none;
+            z-index: 10;
+            margin-bottom: 10px;
+        }
+
+        .row-list-item:hover .quick-preview {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .quick-preview-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .quick-preview-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+
+        .quick-preview-rating {
+            color: #46d369;
+            font-weight: bold;
+        }
+
+        .quick-preview-description {
+            font-size: 12px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .quick-preview-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .quick-preview-button {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .quick-preview-button i {
+            font-size: 10px;
         }
 
         /* Modal Styles */
@@ -450,6 +575,13 @@
             .episode-selector {
                 grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
             }
+
+            /* Adjust quick preview for mobile */
+            .quick-preview {
+                width: 200px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -480,18 +612,42 @@
 
     <!-- Rows -->
     <div class="row">
-        <h2 class="row-title">Trending Movies</h2>
-        <div class="row-list" id="movies-list"></div>
+        <div class="row-header">
+            <h2 class="row-title">Trending Movies</h2>
+            <div class="row-nav">
+                <button class="row-nav-button prev" onclick="scrollRow('movies-list', -300)"><i class="fas fa-chevron-left"></i></button>
+                <button class="row-nav-button next" onclick="scrollRow('movies-list', 300)"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+        <div class="row-list-container">
+            <div class="row-list" id="movies-list"></div>
+        </div>
     </div>
 
     <div class="row">
-        <h2 class="row-title">Trending TV Shows</h2>
-        <div class="row-list" id="tvshows-list"></div>
+        <div class="row-header">
+            <h2 class="row-title">Trending TV Shows</h2>
+            <div class="row-nav">
+                <button class="row-nav-button prev" onclick="scrollRow('tvshows-list', -300)"><i class="fas fa-chevron-left"></i></button>
+                <button class="row-nav-button next" onclick="scrollRow('tvshows-list', 300)"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+        <div class="row-list-container">
+            <div class="row-list" id="tvshows-list"></div>
+        </div>
     </div>
 
     <div class="row">
-        <h2 class="row-title">Anime</h2>
-        <div class="row-list" id="anime-list"></div>
+        <div class="row-header">
+            <h2 class="row-title">Anime</h2>
+            <div class="row-nav">
+                <button class="row-nav-button prev" onclick="scrollRow('anime-list', -300)"><i class="fas fa-chevron-left"></i></button>
+                <button class="row-nav-button next" onclick="scrollRow('anime-list', 300)"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+        <div class="row-list-container">
+            <div class="row-list" id="anime-list"></div>
+        </div>
     </div>
 
     <!-- Details Modal -->
@@ -562,6 +718,15 @@
         let currentSeason = 1;
         let currentEpisode = 1;
 
+        // Scroll row function
+        function scrollRow(rowId, amount) {
+            const row = document.getElementById(rowId);
+            row.scrollBy({
+                left: amount,
+                behavior: 'smooth'
+            });
+        }
+
         async function fetchTrending(type) {
             const res = await fetch(`${BASE_URL}/trending/${type}/week?api_key=${API_KEY}`);
             const data = await res.json();
@@ -611,11 +776,42 @@
             items.forEach(item => {
                 if (!item.poster_path) return;
 
+                const itemContainer = document.createElement('div');
+                itemContainer.className = 'row-list-item';
+                
                 const img = document.createElement('img');
                 img.src = `${IMG_URL}${item.poster_path}`;
                 img.alt = item.title || item.name;
-                img.onclick = () => showDetails(item);
-                container.appendChild(img);
+                
+                // Quick Preview Element
+                const quickPreview = document.createElement('div');
+                quickPreview.className = 'quick-preview';
+                
+                // Create star rating (0-5 stars based on vote_average)
+                const rating = Math.round(item.vote_average / 2);
+                const ratingStars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+                
+                quickPreview.innerHTML = `
+                    <div class="quick-preview-title">${item.title || item.name}</div>
+                    <div class="quick-preview-info">
+                        <span>${item.release_date ? item.release_date.substring(0, 4) : item.first_air_date ? item.first_air_date.substring(0, 4) : 'N/A'}</span>
+                        <span class="quick-preview-rating">${ratingStars} (${item.vote_average.toFixed(1)})</span>
+                    </div>
+                    <div class="quick-preview-description">${item.overview || 'No description available.'}</div>
+                    <div class="quick-preview-buttons">
+                        <button class="quick-preview-button" onclick="event.stopPropagation(); showDetails(${JSON.stringify(item).replace(/"/g, '&quot;')})">
+                            <i class="fas fa-play"></i> Play
+                        </button>
+                        <button class="quick-preview-button" onclick="event.stopPropagation(); showDetails(${JSON.stringify(item).replace(/"/g, '&quot;')})">
+                            <i class="fas fa-info-circle"></i> Info
+                        </button>
+                    </div>
+                `;
+                
+                itemContainer.appendChild(img);
+                itemContainer.appendChild(quickPreview);
+                itemContainer.onclick = () => showDetails(item);
+                container.appendChild(itemContainer);
             });
         }
 
