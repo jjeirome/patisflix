@@ -540,6 +540,31 @@
             padding-top: 100px;
         }
 
+        /* Download App Button */
+        .download-app-btn {
+            background-color: #e50914;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 15px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .download-app-btn:hover {
+            background-color: #f40612;
+        }
+
+        .download-app-btn i {
+            font-size: 16px;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .navbar {
@@ -582,6 +607,16 @@
                 left: 50%;
                 transform: translateX(-50%);
             }
+
+            /* Adjust download button for mobile */
+            .download-app-btn {
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+
+            .download-app-btn i {
+                font-size: 14px;
+            }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -597,6 +632,9 @@
     <nav class="navbar">
         <img src="https://blogger.googleusercontent.com/img/a/AVvXsEiiZjh5HV9KWDzC56QoPC9NLXF5mZzoPCWt8NhaE1nCoNCvHdfuEScH47SK1lZRs1UMoyIfhaYHvziiB8h_k1z3qphky4CiXFsg_b8mV5DpgFLFJp9gi4vHxtOdjmsDDbC7iuAKotlHATJAMMuAkZ3YXs1bBwNC2whY3aQz5B9xC1DzqwoEJ3_g-m_MU6K_=s301" alt="Streamflix Logo">
         <div class="nav-right">
+            <a href="https://dl.dropboxusercontent.com/scl/fi/yu4zzny7oxifgpwp0kqr4/Patisflix.apk?rlkey=1uskhsiq08rwren51s4zp79g1&e=1&st=fa4isyxc&dl=0" class="download-app-btn" download="Patisflix.apk">
+                <i class="fas fa-download"></i> Download App
+            </a>
             <i class="fas fa-search" onclick="openSearchModal()"></i>
         </div>
     </nav>
